@@ -4,6 +4,8 @@ import { Combinator, IGroup, IQuery, IRule } from "./types";
 import { findNode, isGroup, isRoot } from "./utils";
 import { combinatorOptions } from "./constants";
 
+
+
 type GroupProps = {
   combinator: Combinator;
   subConditions: (IRule | IGroup)[];
@@ -19,6 +21,28 @@ const Group = ({
   setQuery,
   query,
 }: GroupProps) => {
+
+  const newRule: IRule = {
+    fieldName: "name",
+    operation: "EQUAL",
+    value: "",
+  };
+
+  const newGroup: IGroup = { combinator: "AND", subConditions: [] };
+
+  const addCondition = (condition: IRule | IGroup) => {
+    const updatedQuery = { ...query };
+    const targetNode = findNode(updatedQuery, path) as IGroup | IQuery;
+
+    if (isRoot(targetNode)) {
+      targetNode.conditions?.push(condition);
+    } else if (targetNode.subConditions) {
+      targetNode.subConditions?.push(condition);
+    }
+
+    setQuery(updatedQuery);
+  }
+
   return (
     <div style={{ border: "1px solid black", padding: "1rem" }}>
       <div style={{ display: "flex", marginBottom: "1rem", gap: "1rem" }}>
@@ -40,47 +64,9 @@ const Group = ({
           )}
         </select>
 
-        <button
-          onClick={() => {
-            const newRule: IRule = {
-              fieldName: "name",
-              operation: "EQUAL",
-              value: "",
-            };
-            const updatedQuery = { ...query };
+        <button onClick={() => addCondition(newRule)}> + Add Rule </button>
+        <button onClick={() => addCondition(newGroup)}> + Add Group </button>
 
-            const targetNode = findNode(updatedQuery, path) as IGroup | IQuery;
-
-            if (isRoot(targetNode)) {
-              targetNode.conditions.push(newRule);
-            } else if (targetNode.subConditions) {
-              targetNode.subConditions.push(newRule);
-            }
-
-            setQuery(updatedQuery);
-          }}
-        >
-          + Add Rule
-        </button>
-
-        <button
-          onClick={() => {
-            const newGroup: IGroup = { combinator: "AND", subConditions: [] };
-            const updatedQuery = { ...query };
-
-            const targetNode = findNode(updatedQuery, path) as IGroup | IQuery;
-
-            if (isRoot(targetNode)) {
-              targetNode.conditions.push(newGroup);
-            } else if (targetNode.subConditions) {
-              targetNode.subConditions.push(newGroup);
-            }
-
-            setQuery(updatedQuery);
-          }}
-        >
-          + Add Group
-        </button>
       </div>
 
       <div>
