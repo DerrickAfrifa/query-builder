@@ -42,7 +42,6 @@ const initialQuery: IQuery = {
   ],
 };
 
-
 const App = () => {
   const [query, setQuery] = useState<IQuery>(initialQuery);
 
@@ -56,39 +55,39 @@ const App = () => {
   };
 
   return (
-    <div style={{ display: "flex", flexDirection: "column" }}>
-      <h1>Query Builder</h1>
+    <div className="flex flex-col px-4">
+      <h1 className="text-2xl font-bold mb-4">Query Builder</h1>
 
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          backgroundColor: "lightgray",
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            backgroundColor: "tomato",
-            width: "50%",
-          }}
-        >
+      <div className="flex bg-neutral-100 p-4 rounded-md text-sm">
+        <div className="flex flex-col w-2/3 h-[85vh] max-h-[85vh] overflow-y-auto rounded-md border border-slate-300">
           <QueryBuilder query={query} setQuery={setQuery} />
         </div>
 
-        <h3>Generated JSON:</h3>
-        <pre>{JSON.stringify(query, null, 2)}</pre>
+        <div className="flex flex-col w-1/3 mx-4">
+          <pre className="max-h-[80vh] overflow-y-auto bg-white p-2 rounded-md shadow">
+            {JSON.stringify(query, null, 2)}
+          </pre>
+          <form className="mt-4 flex justify-end gap-2">
+            <button
+              type="button"
+              onClick={handleClick}
+              className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              onClick={handleClick}
+              className="bg-slate-800 text-white px-4 py-2 rounded-md hover:bg-slate-700"
+            >
+              Submit
+            </button>            
+          </form>          
+        </div>
+
       </div>
 
-      <form>
-        <button type="button" onClick={handleClick}>
-          Submit
-        </button>
-        <button type="button" onClick={handleClick}>
-          Cancel
-        </button>
-      </form>
+
     </div>
   );
 }

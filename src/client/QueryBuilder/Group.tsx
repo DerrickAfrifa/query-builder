@@ -4,14 +4,13 @@ import { Combinator, IGroup, IQuery, IRule } from "./types";
 import { findNode, isGroup, isRoot } from "./utils";
 import { combinatorOptions } from "./constants";
 
-
-
 type GroupProps = {
   combinator: Combinator;
   subConditions: (IRule | IGroup)[];
   path: number[];
   setQuery: Dispatch<SetStateAction<IQuery>>;
   query: IQuery;
+  bordered?: boolean;
 };
 
 const Group = ({
@@ -20,6 +19,7 @@ const Group = ({
   path,
   setQuery,
   query,
+  bordered = true,
 }: GroupProps) => {
 
   const newRule: IRule = {
@@ -44,8 +44,8 @@ const Group = ({
   }
 
   return (
-    <div style={{ border: "1px solid black", padding: "1rem" }}>
-      <div style={{ display: "flex", marginBottom: "1rem", gap: "1rem" }}>
+    <div className={`border ${bordered ? "border-slate-300" : "border-transparent"} rounded-md p-4 mb-2 last:mb-0`}>
+      <div className="flex mb-4 gap-4">
         <select
           value={combinator}
           onChange={(e) => {
@@ -54,6 +54,7 @@ const Group = ({
             targetGroup.combinator = e.target.value as Combinator;
             setQuery(updatedQuery);
           }}
+          className="border border-gray-300 rounded-md p-2"
         >
           {(Object.keys(combinatorOptions) as Combinator[]).map(
             (combinator) => (
@@ -64,9 +65,18 @@ const Group = ({
           )}
         </select>
 
-        <button onClick={() => addCondition(newRule)}> + Add Rule </button>
-        <button onClick={() => addCondition(newGroup)}> + Add Group </button>
-
+        <button
+          onClick={() => addCondition(newRule)}
+          className="bg-slate-800 text-white px-2 py-0.5 rounded-md hover:bg-slate-700"
+        >
+          + Add Rule
+        </button>
+        <button
+          onClick={() => addCondition(newGroup)}
+          className="bg-slate-800 text-white px-2 py-0.5 rounded-md hover:bg-slate-700"
+        >
+          + Add Group
+        </button>
       </div>
 
       <div>
@@ -78,6 +88,7 @@ const Group = ({
               path={path.concat(index)}
               setQuery={setQuery}
               query={query}
+              bordered
             />
           ) : (
             <Rule

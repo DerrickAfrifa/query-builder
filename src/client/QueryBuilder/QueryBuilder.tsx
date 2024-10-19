@@ -13,6 +13,7 @@ const QueryBuilder = ({ query, setQuery }: QueryBuilderProps) => {
       path={[]}
       setQuery={setQuery}
       query={query}
+      bordered={false}
     />
   );
 }
