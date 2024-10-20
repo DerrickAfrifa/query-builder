@@ -41,12 +41,18 @@ const Group = ({
     }
 
     setQuery(updatedQuery);
-  }
+  };
 
   return (
-    <div className={`border ${bordered ? "border-slate-300" : "border-transparent"} rounded-md p-4 mb-2 last:mb-0`}>
+    <div
+      key={path.join("-")}
+      className={`border ${
+        bordered ? "border-slate-300" : "border-transparent"
+      } rounded-md p-2 md:p-4 mb-2 last:mb-0 relative`}
+    >
       <div className="flex mb-4 gap-4">
         <select
+          key={`${path.join("-")}-combinator`}
           value={combinator}
           onChange={(e) => {
             const updatedQuery = { ...query };
@@ -54,11 +60,14 @@ const Group = ({
             targetGroup.combinator = e.target.value as Combinator;
             setQuery(updatedQuery);
           }}
-          className="border border-gray-300 rounded-md p-2"
+          className="border border-gray-300 rounded-md"
         >
           {(Object.keys(combinatorOptions) as Combinator[]).map(
             (combinator) => (
-              <option value={combinator}>
+              <option
+                key={`${path.join("-")}-${combinator}-option`}
+                value={combinator}
+              >
                 {combinatorOptions[combinator]}
               </option>
             )
@@ -67,13 +76,13 @@ const Group = ({
 
         <button
           onClick={() => addCondition(newRule)}
-          className="bg-slate-800 text-white px-2 py-0.5 rounded-md hover:bg-slate-700"
+          className="bg-slate-800 text-sm text-white px-2 py-1 rounded-md hover:bg-slate-700 leading-none"
         >
           + Add Rule
         </button>
         <button
           onClick={() => addCondition(newGroup)}
-          className="bg-slate-800 text-white px-2 py-0.5 rounded-md hover:bg-slate-700"
+          className="bg-slate-800 text-sm text-white px-2 py-1 rounded-md hover:bg-slate-700 leading-none"
         >
           + Add Group
         </button>
@@ -83,6 +92,7 @@ const Group = ({
         {subConditions.map((subCondition, index) =>
           isGroup(subCondition) ? (
             <Group
+              key={`${path.join("-")}-${index}-group`}
               combinator={subCondition.combinator}
               subConditions={subCondition.subConditions}
               path={path.concat(index)}
@@ -92,6 +102,7 @@ const Group = ({
             />
           ) : (
             <Rule
+              key={`${path.join("-")}-${index}-rule`}
               condition={subCondition as IRule}
               path={path.concat(index)}
               setQuery={setQuery}

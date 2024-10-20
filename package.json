@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host",
     "build": "tsc -b && vite build",
     "test": "vitest",
     "lint": "eslint .",
@@ -13,12 +13,14 @@
     "dev:server": "nodemon --watch src/server --exec \"npx tsc -p tsconfig.node.json && node dist/server/index.js\""
   },
   "dependencies": {
+    "@types/react-syntax-highlighter": "^15.5.13",
     "axios": "1.7.7",
     "body-parser": "1.20.3",
     "concurrently": "9.0.1",
     "express": "4.21.0",
     "react": "18.3.1",
-    "react-dom": "18.3.1"
+    "react-dom": "18.3.1",
+    "react-syntax-highlighter": "^15.6.1"
   },
   "devDependencies": {
     "@eslint/js": "9.9.0",

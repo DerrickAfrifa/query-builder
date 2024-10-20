@@ -12,7 +12,7 @@ type RuleProps = {
 
 const valueWidgets: { [key in Field]: (value: any) => React.ReactNode } = {
   amount: ({ value, setQuery, query, path }) => (
-    <div className="flex items-center gap-2">
+    <div className="flex flex-col md:flex-row items-center gap-4 md:gap-2 w-full md:w-auto">
       <input
         type="number"
         value={value.amount || 0}
@@ -27,7 +27,7 @@ const valueWidgets: { [key in Field]: (value: any) => React.ReactNode } = {
           };
           setQuery(updatedQuery);
         }}
-        className="border border-gray-300 rounded-md p-1"
+        className="border border-gray-300 rounded-md p-1 w-full md:w-auto"
       />
       <select
         value={value.currency || "EUR"}
@@ -42,7 +42,7 @@ const valueWidgets: { [key in Field]: (value: any) => React.ReactNode } = {
           };
           setQuery(updatedQuery);
         }}
-        className="border border-gray-300 rounded-md p-1"
+        className="border border-gray-300 rounded-md p-1 w-full md:w-auto"
       >
         {Object.keys(currencyOptions).map((currency) => (
           <option value={currency}>{currencyOptions[currency]}</option>
@@ -62,7 +62,7 @@ const valueWidgets: { [key in Field]: (value: any) => React.ReactNode } = {
         targetNode.value = e.target.value;
         setQuery(updatedQuery);
       }}
-      className="border border-gray-300 rounded-md p-1"
+      className="border border-gray-300 rounded-md p-1 w-full md:w-auto"
     />
   ),
   id: ({ value, setQuery, query, path }) => (
@@ -77,7 +77,7 @@ const valueWidgets: { [key in Field]: (value: any) => React.ReactNode } = {
         targetNode.value = e.target.value;
         setQuery(updatedQuery);
       }}
-      className="border border-gray-300 rounded-md p-1"
+      className="border border-gray-300 rounded-md p-1 w-full md:w-auto"
     />
   ),
   transaction_state: ({ value, setQuery, query, path }) => (
@@ -91,7 +91,7 @@ const valueWidgets: { [key in Field]: (value: any) => React.ReactNode } = {
         targetNode.value = e.target.value;
         setQuery(updatedQuery);
       }}
-      className="border border-gray-300 rounded-md p-1"
+      className="border border-gray-300 rounded-md p-1 w-full md:w-auto"
     >
       <option value="SUCCEEDED">SUCCEEDED</option>
       <option value="REJECTED">REJECTED</option>
@@ -114,7 +114,7 @@ const valueWidgets: { [key in Field]: (value: any) => React.ReactNode } = {
         targetNode.value = e.target.value;
         setQuery(updatedQuery);
       }}
-      className="border border-gray-300 rounded-md p-1"
+      className="border border-gray-300 rounded-md p-1 w-full md:w-auto"
     />
   ),
   installments: ({ value, setQuery, query, path }) => (
@@ -129,7 +129,7 @@ const valueWidgets: { [key in Field]: (value: any) => React.ReactNode } = {
         targetNode.value = e.target.value;
         setQuery(updatedQuery);
       }}
-      className="border border-gray-300 rounded-md p-1"
+      className="border border-gray-300 rounded-md p-1 w-full md:w-auto"
     />
   ),
 };
@@ -137,8 +137,9 @@ const valueWidgets: { [key in Field]: (value: any) => React.ReactNode } = {
 const Rule = ({ condition, path, setQuery, query }: RuleProps) => {
   const { fieldName, operation, value } = condition;
   return (
-    <div className="flex gap-2 items-center mb-2">
+    <div key={path.join("-")} className="flex flex-col md:flex-row gap-4 md:gap-4 items-center mb-8 md:mb-2">
       <select
+        key={`${path.join("-")}-field`}
         value={fieldName}
         onChange={(e) => {
           const updatedQuery = { ...query };
@@ -149,14 +150,15 @@ const Rule = ({ condition, path, setQuery, query }: RuleProps) => {
           targetNode.value = defaultValues[e.target.value as Field];
           setQuery(updatedQuery);
         }}
-        className="border border-gray-300 rounded-md p-1"
+        className="border border-gray-300 rounded-md p-1 w-full md:w-auto"
       >
         {(Object.keys(fieldOptions) as Field[]).map((field) => (
-          <option value={field}>{fieldOptions[field]}</option>
+          <option key={`${path.join("-")}-${field}-option`} value={field}>{fieldOptions[field]}</option>
         ))}
       </select>
 
       <select
+        key={`${path.join("-")}-operation`}
         value={operation}
         onChange={(e) => {
           const updatedQuery = { ...query };
@@ -166,10 +168,10 @@ const Rule = ({ condition, path, setQuery, query }: RuleProps) => {
           targetNode.operation = e.target.value as Operation;
           setQuery(updatedQuery);
         }}
-        className="border border-gray-300 rounded-md p-1"
+        className="border border-gray-300 rounded-md p-1 w-full md:w-auto"
       >
         {(operationOptions[fieldName] as Operation[]).map((operation) => (
-          <option value={operation}>{operation}</option>
+          <option key={`${path.join("-")}-${operation}-option`} value={operation}>{operation}</option>
         ))}
       </select>
 
